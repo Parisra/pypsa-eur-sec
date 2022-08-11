@@ -60,9 +60,13 @@ For every country, heat demand is split between low and high population density 
 
 •	Cooling demand
 Cooling is electrified and is included in the electricity demand. Cooling demand is assumed to remain at current levels.  An example of regional distribution of the total heat demand for network 181 regions is depicted below.
+
 .. image:: ../graphics/Heat_demand_map.png
+
 As below figure shows, the current total heat demand in Europe is similar to the total electricity demand but features much more pronounced seasonal variations. The current total building heating demand in Europe adds up to 3084 TWh/a of which 78% occurs in urban areas.
+
 .. image:: ../graphics/Heat_and_el_demand_timeseries.png
+
 In practice, inn PyPSA-Eur-Sec, there are heat demand buses to which the corresponding heat demands are added. 
 1.	Urban central heat: large-scale district heating networks in urban areas with dense heat population. Residential and services demand in these areas are added as demands to this bus
 2.	Residential urban decentral heat: heating for residential buildings in urban areas not using district heating
