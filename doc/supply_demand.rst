@@ -67,12 +67,14 @@ As below figure shows, the current total heat demand in Europe is similar to the
 
 .. image:: ../graphics/Heat_and_el_demand_timeseries.png
 
-In practice, inn PyPSA-Eur-Sec, there are heat demand buses to which the corresponding heat demands are added. 
-1.	Urban central heat: large-scale district heating networks in urban areas with dense heat population. Residential and services demand in these areas are added as demands to this bus
-2.	Residential urban decentral heat: heating for residential buildings in urban areas not using district heating
-3.	Services urban decentral heat: heating for services buildings in urban areas not using district heating
-4.	Residential rural heat: heating for residential buildings in rural areas with low population density.
-5.	Services rural heat: heating for residential services buildings in rural areas with low population density. Heat demand from agriculture  sector is also included here. 
+In practice, in PyPSA-Eur-Sec, there are heat demand buses to which the corresponding heat demands are added. 
+
+
+1)	Urban central heat: large-scale district heating networks in urban areas with dense heat population. Residential and services demand in these areas are added as demands to this bus
+2)	Residential urban decentral heat: heating for residential buildings in urban areas not using district heating
+3)	Services urban decentral heat: heating for services buildings in urban areas not using district heating
+4)	Residential rural heat: heating for residential buildings in rural areas with low population density.
+5)	Services rural heat: heating for residential services buildings in rural areas with low population density. Heat demand from agriculture  sector is also included here. 
 
 
 Heat supply
