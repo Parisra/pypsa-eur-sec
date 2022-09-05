@@ -30,13 +30,16 @@ sys.path.insert(0, os.path.abspath('../scripts'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    #'sphinx.ext.autodoc',
-    #'sphinx.ext.autosummary',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.autosectionlabel'
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
     'sphinx.ext.graphviz',
+    "nbsphinx",
+    "nbsphinx_link",
     #'sphinx.ext.pngmath',
     #'sphinxcontrib.tikz',
     #'rinoh.frontend.sphinx',
