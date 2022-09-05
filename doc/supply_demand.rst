@@ -38,8 +38,7 @@ The remaining electricity demand for households and services is distributed insi
 
 Heat demand
 =============================
-Building heating in residential and services sectors is resolved regionally, both for individual buildings and district heating systems, which include different supply options, see
-:ref:`line-model`.
+Building heating in residential and services sectors is resolved regionally, both for individual buildings and district heating systems, which include different supply options (see :ref:`heat-supply`).
 Annual heat demands per country are retrieved from `JRC-IDEES  <https://op.europa.eu/en/publication-detail/-/publication/989282db-ad65-11e7-837e-01aa75ed71a1/language-en>`_ and split into space and water heating. For space heating, the annual demands are converted to daily values based on the population-weighted Heating Degree Day (HDD) using the `atlite tool <https://github.com/PyPSA/atlite>`_, where space heat demand is proportional to the difference between the daily average ambient temperature (read from `ERA5 <https://doi.org/10.1002/qj.3803>`_) and a threshold temperature above which space heat demand is zero. A threshold temperature of 15 °C is assumed by default. The daily space heat demand is distributed to the hours of the day following heat demand profiles from `BDEW <https://github.com/oemof/demandlib>`_. These differ for weekdays and weekends/holidays and between residential and services demand.  
 
 •	Space heating
@@ -71,10 +70,6 @@ In practice, inn PyPSA-Eur-Sec, there are heat demand buses to which the corresp
 4.	Residential rural heat: heating for residential buildings in rural areas with low population density.
 5.	Services rural heat: heating for residential services buildings in rural areas with low population density. Heat demand from agriculture  sector is also included here. 
 
-.. _line-model:
-
-Line model
-----------
 .. _heat-supply:
 
 Heat supply
