@@ -164,3 +164,15 @@ The code in PyPSA-Eur-Sec is released as free software under the
 `MIT license <https://opensource.org/licenses/MIT>`_, see
 `LICENSE <https://github.com/PyPSA/pypsa-eur-sec/blob/master/LICENSE.txt>`_.
 However, different licenses and terms of use may apply to the various input data.
+
+.. _line-model:
+
+Line model
+----------
+
+Lines represent transmission and distribution lines. They connect a
+``bus0`` to a ``bus1``. They can connect either AC buses or DC
+buses. Power flow through lines is not directly controllable, but is
+determined passively by their impedances and the nodal power
+imbalances. To see how the impedances are used in the power flow, see
+:ref:`line-model`.
