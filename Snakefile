@@ -589,7 +589,7 @@ rule make_iamc_table:
             RDIR + "/postnetworks/elec_s{simpl}_{clusters}_lv{lv}_{opts}_{sector_opts}_{planning_horizons}.nc",
             **config['scenario']
         ),
-        iamc_format='data/format/IAMC_format.xlsx',
+        iamc_format='data/IAMC_format.xlsx',
         costs=SDIR + '/graphs/costs.pdf',
     output:
         results_iamc=RDIR + '/csvs/iamc.csv' 
