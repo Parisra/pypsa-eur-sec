@@ -30,7 +30,7 @@ subworkflow pypsaeur:
     configfile: "../pypsa-eur/config.yaml"
 
 rule all:
-    input: SDIR + '/graphs/costs.pdf'
+    input: RDIR + '/csvs/iamc.csv' 
 
 
 rule solve_all_networks:
@@ -582,6 +582,22 @@ rule plot_summary:
     benchmark: SDIR + "/benchmarks/plot_summary"
     script: "scripts/plot_summary.py"
 
+rule make_iamc_table:
+    input:
+        overrides='data/override_component_attrs',
+        networks=expand(
+            RDIR + "/postnetworks/elec_s{simpl}_{clusters}_lv{lv}_{opts}_{sector_opts}_{planning_horizons}.nc",
+            **config['scenario']
+        ),
+        iamc_format='data/format/IAMC_format.xlsx',
+        costs=SDIR + '/graphs/costs.pdf',
+    output:
+        results_iamc=RDIR + '/csvs/iamc.csv' 
+    threads: 1
+    resources: mem_mb=10000
+    benchmark: SDIR + "/benchmarks/make_iamc_table"
+    script: "scripts/make_iamc_table.py"
+	
 
 if config["foresight"] == "overnight":
 
