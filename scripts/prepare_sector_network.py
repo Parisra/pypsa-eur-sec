@@ -2416,6 +2416,35 @@ def limit_individual_line_extension(n, maxext):
     n.lines['s_nom_max'] = n.lines['s_nom'] + maxext
     hvdc = n.links.index[n.links.carrier == 'DC']
     n.links.loc[hvdc, 'p_nom_max'] = n.links.loc[hvdc, 'p_nom'] + maxext
+    
+def build_new_wind(n,wind_op):
+    
+    df_wind_new=pd.read_csv('wind_profiles/aggCFvoronoi509model{}OCnoInterpolation.csv'.format(wind_op),index_col=0,parse_dates=True)
+    df_wind = pd.DataFrame(data=df_wind_new.values,
+                       columns=n.generators_t.p_max_pu.filter(like='onwind').columns)
+    df_wind.index=n.loads_t.p.index
+    onwind = n.generators.index[n.generators.carrier == "onwind"]
+    bus_ = n.generators.loc[onwind, "bus"]
+    p_nom_max_=n.generators.loc[onwind, 'p_nom_max']
+    marginal_cost_=n.generators.loc[onwind, 'marginal_cost']
+    capital_cost_=n.generators.loc[onwind, 'capital_cost']
+    efficiency_=n.generators.loc[onwind, 'efficiency']
+    lifetime_=n.generators.loc[onwind, 'lifetime']
+
+    n.generators.drop(onwind, inplace=True)
+
+    n.madd("Generator",
+        onwind,
+        bus=bus_,
+        carrier="onwind",
+        p_nom_extendable=True,
+        p_nom_max=p_nom_max_,
+        marginal_cost=marginal_cost_,
+        capital_cost=capital_cost_,
+        efficiency=efficiency_,
+        p_max_pu=df_wind,   #replaces the wind CFs with new values obtained from table
+        lifetime=lifetime_,
+      )   
 
 #%%
 if __name__ == "__main__":
@@ -2551,7 +2580,13 @@ if __name__ == "__main__":
         maxext = float(o[10:]) * 1e3
         limit_individual_line_extension(n, maxext)
         break
-
+    
+    for o in opts:
+        if o[:10] == 'customwind': 
+          wind_op = o[10:]
+          print('wind_opt is {}'.format(wind_op))
+          build_new_wind(n,wind_op) 
+        
     if options['electricity_distribution_grid']:
         insert_electricity_distribution_grid(n, costs)
 
