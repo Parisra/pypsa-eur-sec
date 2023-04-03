@@ -7,7 +7,7 @@ retrieve_sector_databundle: true
 results_dir: results/
 summary_dir: results
 costs_dir: ../technology-data/outputs/
-run: your-run-name  # use this to keep track of runs with different settings
+run: katharina-wind-data  # use this to keep track of runs with different settings
 foresight: overnight # options are overnight, myopic, perfect (perfect is not yet implemented)
 # if you use myopic or perfect foresight, set the investment years in "planning_horizons" below
 
@@ -15,15 +15,30 @@ scenario:
   simpl: # only relevant for PyPSA-Eur
     - ''
   lv: # allowed transmission line volume expansion, can be any float >= 1.0 (today) or "opt"
-    - 1.0
-    - 1.5
+    - 'opt'
   clusters: # number of nodes in Europe, any integer between 37 (1 node per country-zone) and several hundred
-    - 45
-    - 50
+    - 512
   opts: # only relevant for PyPSA-Eur
     - ''
   sector_opts: # this is where the main scenario settings are
-    - Co2L0-3H-T-H-B-I-A-solar+p3-dist1
+
+    - Co2L0-3H-solar+p3-dist1-customwind18B
+    - Co2L0-3H-solar+p3-dist1-customwind19B
+    - Co2L0-3H-solar+p3-dist1-customwind20B
+    - Co2L0-3H-solar+p3-dist1-customwind21B
+    - Co2L0-3H-solar+p3-dist1-customwind2E
+    - Co2L0-3H-solar+p3-dist1-customwind10E
+    - Co2L0-3H-solar+p3-dist1-customwind16E
+    - Co2L0-3H-solar+p3-dist1-customwind22E
+    - Co2L0-3H-solar+p3-dist1-customwind23E
+    - Co2L0-3H-solar+p3-dist1-customwind26E
+    - Co2L0-3H-solar+p3-dist1-customwind36E
+    - Co2L0-3H-solar+p3-dist1-customwind38E
+    - Co2L0-3H-solar+p3-dist1-customwind59E
+    - Co2L0-3H-solar+p3-dist1-customwind64E
+    - Co2L0p05-3H-solar+p3-dist1-customwind10E
+    - Co2L0p05-3H-solar+p3-dist1-customwind21B
+
   # to really understand the options here, look in scripts/prepare_sector_network.py
   # Co2Lx specifies the CO2 target in x% of the 1990 values; default will give default (5%);
   # Co2L0p25 will give 25% CO2 emissions; Co2Lm0p05 will give 5% negative emissions
@@ -241,7 +256,7 @@ sector:
   helmeth: true
   coal_cc: false
   dac: true
-  co2_vent: false
+  co2_vent: true
   SMR: true
   co2_sequestration_potential: 200  #MtCO2/a sequestration potential for Europe
   co2_sequestration_cost: 10   #EUR/tCO2 for sequestration of CO2
@@ -256,8 +271,8 @@ sector:
   use_fuel_cell_waste_heat: true
   electricity_distribution_grid: true
   electricity_distribution_grid_cost_factor: 1.0  #multiplies cost in data/costs.csv
-  electricity_grid_connection: true  # only applies to onshore wind and utility PV
-  H2_network: true
+  electricity_grid_connection: false  # only applies to onshore wind and utility PV
+  H2_network: true #true
   gas_network: false
   H2_retrofit: false  # if set to True existing gas pipes can be retrofitted to H2 pipes
   # according to hydrogen backbone strategy (April, 2020) p.15
@@ -270,6 +285,11 @@ sector:
   biomass_transport: false  # biomass transport between nodes
   conventional_generation: # generator : carrier
     OCGT: gas
+    nuclear : uranium
+    CCGT: gas
+    coal: coal
+    lignite: lignite  #
+    oil: oil          #
   biomass_to_liquid: false
   biosng: false
 
@@ -352,7 +372,7 @@ costs:
 
 
 solving:
-  #tmpdir: "path/to/tmp"
+  tmpdir: 'scratch/$SLURM_JOB_ID'
   options:
     formulation: kirchhoff
     clip_p_max_pu: 1.e-2
@@ -382,6 +402,7 @@ solving:
     AggFill: 0
     PreDual: 0
     GURO_PAR_BARDENSETHRESH: 200
+    DualReductions : 0
     #FeasibilityTol: 1.e-6
 
     #name: cplex
@@ -390,7 +411,7 @@ solving:
     #solutiontype: 2 # non basic solution, ie no crossover
     #barrier_convergetol: 1.e-5
     #feasopt_tolerance: 1.e-6
-  mem: 30000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
+  mem: 480000 #480000 #memory in MB; 20 GB enough for 50+B+I+H2; 100 GB for 181+B+I+H2
 
 
 plotting:
@@ -435,190 +456,4 @@ plotting:
     - Converter AC-DC
   heat_links:
     - heat pump
-    - resistive heater
-    - CHP heat
-    - CHP electric
-    - gas boiler
-    - central heat pump
-    - central resistive heater
-    - central CHP heat
-    - central CHP electric
-    - central gas boiler
-  heat_generators:
-    - gas boiler
-    - central gas boiler
-    - solar thermal collector
-    - central solar thermal collector
-  tech_colors:
-    # wind
-    onwind: "#235ebc"
-    onshore wind: "#235ebc"
-    offwind: "#6895dd"
-    offshore wind: "#6895dd"
-    offwind-ac: "#6895dd"
-    offshore wind (AC): "#6895dd"
-    offwind-dc: "#74c6f2"
-    offshore wind (DC): "#74c6f2"
-    # water
-    hydro: '#298c81'
-    hydro reservoir: '#298c81'
-    ror: '#3dbfb0'
-    run of river: '#3dbfb0'
-    hydroelectricity: '#298c81'
-    PHS: '#51dbcc'
-    wave: '#a7d4cf'
-    # solar
-    solar: "#f9d002"
-    solar PV: "#f9d002"
-    solar thermal: '#ffbf2b'
-    solar rooftop: '#ffea80'
-    # gas
-    OCGT: '#e0986c'
-    OCGT marginal: '#e0986c'
-    OCGT-heat: '#e0986c'
-    gas boiler: '#db6a25'
-    gas boilers: '#db6a25'
-    gas boiler marginal: '#db6a25'
-    gas: '#e05b09'
-    fossil gas: '#e05b09'
-    natural gas: '#e05b09'
-    CCGT: '#a85522'
-    CCGT marginal: '#a85522'
-    gas for industry co2 to atmosphere: '#692e0a'
-    gas for industry co2 to stored: '#8a3400'
-    gas for industry: '#853403'
-    gas for industry CC: '#692e0a'
-    gas pipeline: '#ebbca0'
-    gas pipeline new: '#a87c62'
-    # oil
-    oil: '#c9c9c9'
-    oil boiler: '#adadad'
-    agriculture machinery oil: '#949494'
-    shipping oil: "#808080"
-    land transport oil: '#afafaf'
-    # nuclear
-    Nuclear: '#ff8c00'
-    Nuclear marginal: '#ff8c00'
-    nuclear: '#ff8c00'
-    uranium: '#ff8c00'
-    # coal
-    Coal: '#545454'
-    coal: '#545454'
-    Coal marginal: '#545454'
-    solid: '#545454'
-    Lignite: '#826837'
-    lignite: '#826837'
-    Lignite marginal: '#826837'
-    # biomass
-    biogas: '#e3d37d'
-    biomass: '#baa741'
-    solid biomass: '#baa741'
-    solid biomass transport: '#baa741'
-    solid biomass for industry: '#7a6d26'
-    solid biomass for industry CC: '#47411c'
-    solid biomass for industry co2 from atmosphere: '#736412'
-    solid biomass for industry co2 to stored: '#47411c'
-    biomass boiler: '#8A9A5B'
-    biomass to liquid: '#32CD32'
-    BioSNG: '#123456'
-    # power transmission
-    lines: '#6c9459'
-    transmission lines: '#6c9459'
-    electricity distribution grid: '#97ad8c'
-    # electricity demand
-    Electric load: '#110d63'
-    electric demand: '#110d63'
-    electricity: '#110d63'
-    industry electricity: '#2d2a66'
-    industry new electricity: '#2d2a66'
-    agriculture electricity: '#494778'
-    # battery + EVs
-    battery: '#ace37f'
-    battery storage: '#ace37f'
-    home battery: '#80c944'
-    home battery storage: '#80c944'
-    BEV charger: '#baf238'
-    V2G: '#e5ffa8'
-    land transport EV: '#baf238'
-    Li ion: '#baf238'
-    # hot water storage
-    water tanks: '#e69487'
-    hot water storage: '#e69487'
-    hot water charging: '#e69487'
-    hot water discharging: '#e69487'
-    # heat demand
-    Heat load: '#cc1f1f'
-    heat: '#cc1f1f'
-    heat demand: '#cc1f1f'
-    rural heat: '#ff5c5c'
-    central heat: '#cc1f1f'
-    decentral heat: '#750606'
-    low-temperature heat for industry: '#8f2727'
-    process heat: '#ff0000'
-    agriculture heat: '#d9a5a5'
-    # heat supply
-    heat pumps: '#2fb537'
-    heat pump: '#2fb537'
-    air heat pump: '#36eb41'
-    ground heat pump: '#2fb537'
-    Ambient: '#98eb9d'
-    CHP: '#8a5751'
-    CHP CC: '#634643'
-    CHP heat: '#8a5751'
-    CHP electric: '#8a5751'
-    district heating: '#e8beac'
-    resistive heater: '#d8f9b8'
-    retrofitting: '#8487e8'
-    building retrofitting: '#8487e8'
-    # hydrogen
-    H2 for industry: "#f073da"
-    H2 for shipping: "#ebaee0"
-    H2: '#bf13a0'
-    hydrogen: '#bf13a0'
-    SMR: '#870c71'
-    SMR CC: '#4f1745'
-    H2 liquefaction: '#d647bd'
-    hydrogen storage: '#bf13a0'
-    H2 storage: '#bf13a0'
-    land transport fuel cell: '#6b3161'
-    H2 pipeline: '#f081dc'
-    H2 pipeline retrofitted: '#ba99b5'
-    H2 Fuel Cell: '#c251ae'
-    H2 Electrolysis: '#ff29d9'
-    # syngas
-    Sabatier: '#9850ad'
-    methanation: '#c44ce6'
-    methane: '#c44ce6'
-    helmeth: '#e899ff'
-    # synfuels
-    Fischer-Tropsch: '#25c49a'
-    liquid: '#25c49a'
-    kerosene for aviation: '#a1ffe6'
-    naphtha for industry: '#57ebc4'
-    # co2
-    CC: '#f29dae'
-    CCS: '#f29dae'
-    CO2 sequestration: '#f29dae'
-    DAC: '#ff5270'
-    co2 stored: '#f2385a'
-    co2: '#f29dae'
-    co2 vent: '#ffd4dc'
-    CO2 pipeline: '#f5627f'
-    # emissions
-    process emissions CC: '#000000'
-    process emissions: '#222222'
-    process emissions to stored: '#444444'
-    process emissions to atmosphere: '#888888'
-    oil emissions: '#aaaaaa'
-    shipping oil emissions: "#555555"
-    land transport oil emissions: '#777777'
-    agriculture machinery oil emissions: '#333333'
-    # other
-    shipping: '#03a2ff'
-    power-to-heat: '#2fb537'
-    power-to-gas: '#c44ce6'
-    power-to-H2: '#ff29d9'
-    power-to-liquid: '#25c49a'
-    gas-to-power/heat: '#ee8340'
-    waste: '#e3d37d'
-    other: '#000000'
+  
